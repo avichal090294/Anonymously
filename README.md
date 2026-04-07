@@ -2,13 +2,20 @@
 
 An anonymous messaging platform built with Next.js, allowing users to send and receive messages without revealing their identity.
 
+# Anonymously
+
+An anonymous messaging platform built with Next.js, allowing users to send and receive messages without revealing their identity.
+
 ## Features
 
 - **Anonymous Messaging**: Send and receive messages without authentication
-- **User Registration**: Optional user accounts for managing messages
+- **User Registration**: Secure user accounts with email verification
+- **Email Verification**: OTP-based account verification using Resend
+- **Password Security**: Bcrypt hashing for secure password storage
 - **Message Validation**: Robust input validation using Zod schemas
 - **Modern UI**: Clean, responsive interface built with Tailwind CSS
 - **Database Integration**: MongoDB with Mongoose for data persistence
+- **Email Templates**: Professional React Email templates for notifications
 
 ## Tech Stack
 
@@ -16,6 +23,9 @@ An anonymous messaging platform built with Next.js, allowing users to send and r
 - **Styling**: Tailwind CSS
 - **Backend**: Next.js API Routes
 - **Database**: MongoDB with Mongoose
+- **Authentication**: Bcrypt for password hashing
+- **Email Service**: Resend for email delivery
+- **Email Templates**: React Email components
 - **Validation**: Zod
 - **Development**: ESLint, TypeScript
 
@@ -49,6 +59,8 @@ bun install
 3. Create a `.env.local` file in the root directory and add your environment variables:
 ```env
 MONGODB_URI=your_mongodb_connection_string_here
+RESEND_API_KEY=your_resend_api_key_here
+EMAIL_FROM=your-verified-email@yourdomain.com
 ```
 
 4. Run the development server:
@@ -64,26 +76,34 @@ bun dev
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Project Structure
-
 ```
 anonymously/
+├── emails/            # Email templates
+│   └── VerificationEmail.tsx
 ├── src/
 │   ├── app/           # Next.js app directory
+│   │   ├── api/       # API routes
+│   │   │   └── signup/
+│   │   │       └── route.ts
 │   │   ├── globals.css
 │   │   ├── layout.tsx
 │   │   ├── page.tsx
 │   │   └── ...
-│   ├── lib/           # Utility functions
-│   │   └── dbConnect.ts
+│   ├── helpers/       # Utility helper functions
+│   │   └── sendVerificationEmail.ts
+│   ├── lib/           # Library configurations
+│   │   ├── dbConnect.ts
+│   │   └── resend.ts
 │   ├── model/         # Database models
 │   │   └── User.ts
-│   └── schemas/       # Zod validation schemas
-│       ├── acceptMessageSchema.ts
-│       ├── messageSchema.ts
-│       ├── signInSchema.ts
-│       ├── signUpSchema.ts
-│       └── verifySchema.ts
+│   ├── schemas/       # Zod validation schemas
+│   │   ├── acceptMessageSchema.ts
+│   │   ├── messageSchema.ts
+│   │   ├── signInSchema.ts
+│   │   ├── signUpSchema.ts
+│   │   └── verifySchema.ts
+│   └── types/         # TypeScript type definitions
+│       └── ApiResponse.ts
 ├── public/            # Static assets
 ├── package.json
 ├── next.config.ts
@@ -98,6 +118,22 @@ anonymously/
 - `npm run build` - Build the application for production
 - `npm run start` - Start the production server
 - `npm run lint` - Run ESLint for code linting
+
+## API Endpoints
+
+### Authentication
+- `POST /api/signup` - User registration with email verification
+  - Request body: `{ username, email, password }`
+  - Sends verification email with OTP code
+  - Returns success/error response
+
+## Environment Variables
+
+Create a `.env.local` file in the root directory with the following variables:
+
+- `MONGODB_URI` - Your MongoDB connection string
+- `RESEND_API_KEY` - Your Resend API key for email delivery
+- `EMAIL_FROM` - Verified sender email address (e.g., `noreply@yourdomain.com`)
 
 ## Environment Variables
 
