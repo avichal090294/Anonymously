@@ -1,0 +1,12 @@
+import { z } from "zod";
+
+export const messageSchema = z.object({
+  content: z
+    .string()
+    .trim()
+    .min(10, { message: "Content must be at least 10 characters" })
+    .max(300, { message: "Content must be no longer than 300 characters" })
+    .refine((val) => val.length > 0, {
+      message: "Message cannot be empty",
+    }),
+});
