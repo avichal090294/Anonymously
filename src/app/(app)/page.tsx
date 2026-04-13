@@ -1,65 +1,103 @@
-import Image from "next/image";
+'use client';
+
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Mail, MessageSquare, Shield, Users } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Autoplay from 'embla-carousel-autoplay';
+import messages from '@/messages.json';
+
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from '@/components/ui/carousel';
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <>
+      <main className="flex-grow flex flex-col items-center justify-center px-4 md:px-24 py-16 bg-zinc-900 text-white">
+        <section className="text-center mb-12 max-w-2xl">
+          <div className="inline-flex items-center gap-2 bg-zinc-800 rounded-full px-4 py-1.5 mb-6 text-sm text-zinc-300">
+            <Shield className="w-4 h-4 text-emerald-400" />
+            100% Anonymous & Secure
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">
+            Dive into the World of Anonymous Feedback
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-4 text-lg text-zinc-400">
+            Anonnymously — Where your identity remains a secret.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+          <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/signup">
+              <Button size="lg" className="w-full sm:w-auto bg-white text-zinc-900 hover:bg-zinc-200 font-semibold">
+                Get Started
+              </Button>
+            </Link>
+            <Link href="/signin">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto border-zinc-600 text-zinc-300 hover:bg-zinc-800">
+                Sign In
+              </Button>
+            </Link>
+          </div>
+        </section>
+
+        <Carousel
+          plugins={[Autoplay({ delay: 3000 })]}
+          className="w-full max-w-lg md:max-w-xl"
+        >
+          <CarouselContent>
+            {messages.map((message, index) => (
+              <CarouselItem key={index} className="p-2">
+                <Card className="bg-zinc-800 border-zinc-700">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base text-zinc-100">
+                      {message.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex items-start gap-3">
+                    <Mail className="w-5 h-5 shrink-0 text-zinc-400 mt-0.5" />
+                    <div>
+                      <p className="text-sm text-zinc-300">{message.content}</p>
+                      <p className="text-xs text-zinc-500 mt-1">
+                        {message.received}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+
+        <section className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl w-full">
+          <div className="text-center p-6">
+            <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-zinc-800 mb-3">
+              <Shield className="w-5 h-5 text-emerald-400" />
+            </div>
+            <h3 className="font-semibold text-zinc-100 mb-1">Fully Anonymous</h3>
+            <p className="text-sm text-zinc-400">Your identity is never revealed to the recipient.</p>
+          </div>
+          <div className="text-center p-6">
+            <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-zinc-800 mb-3">
+              <MessageSquare className="w-5 h-5 text-blue-400" />
+            </div>
+            <h3 className="font-semibold text-zinc-100 mb-1">Real Feedback</h3>
+            <p className="text-sm text-zinc-400">Get honest opinions without social pressure.</p>
+          </div>
+          <div className="text-center p-6">
+            <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-zinc-800 mb-3">
+              <Users className="w-5 h-5 text-purple-400" />
+            </div>
+            <h3 className="font-semibold text-zinc-100 mb-1">Easy Sharing</h3>
+            <p className="text-sm text-zinc-400">Share your unique link and start receiving messages.</p>
+          </div>
+        </section>
       </main>
-    </div>
+
+      <footer className="text-center p-4 md:p-6 bg-zinc-950 text-zinc-500 text-sm">
+        © {new Date().getFullYear()} Anonymously. All rights reserved.
+      </footer>
+    </>
   );
 }
