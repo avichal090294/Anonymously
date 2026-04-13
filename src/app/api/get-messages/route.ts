@@ -9,7 +9,6 @@ export async function GET(request: Request) {
   await dbConnect();
 
   const session = await getServerSession(authOptions);
-  const user: User = session?.user as User;
 
   if (!session || !session.user) {
     return Response.json(
@@ -23,41 +22,49 @@ export async function GET(request: Request) {
     );
   }
 
+  const user: User = session.user as User;
   const userId = new mongoose.Types.ObjectId(user._id);
+
   try {
-    const user = await UserModel.aggregate([
-      { $match: { id: userId } },
-      { $unwind: "$messages" },
+    const result = await UserModel.aggregate([
+      { $match: { _id: userId } },
+      { $unwind: { path: "$messages", preserveNullAndEmptyArrays: true } },
       { $sort: { "messages.createdAt": -1 } },
       { $group: { _id: "$_id", messages: { $push: "$messages" } } },
     ]);
 
-    if (!user || user.length === 0) {
+    if (!result || result.length === 0) {
       return Response.json(
         {
           success: false,
-          message: "User Not Found",
+          message: "User not found",
         },
         {
-          status: 401,
+          status: 404,
         },
       );
     }
+
+    // Filter out null entries from empty messages array
+    const messages = result[0].messages.filter(
+      (msg: any) => msg != null
+    );
+
     return Response.json(
       {
         success: true,
-        message: user[0].messages,
+        messages: messages,
       },
       {
         status: 200,
       },
     );
   } catch (error) {
-    console.log("Unexpected error occured : ", error);
+    console.log("Unexpected error occurred:", error);
     return Response.json(
       {
         success: false,
-        message: "Failed to update user to accept messages",
+        message: "Failed to fetch messages",
       },
       {
         status: 500,

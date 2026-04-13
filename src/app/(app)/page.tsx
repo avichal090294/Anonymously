@@ -23,7 +23,7 @@ export default function Home() {
             100% Anonymous & Secure
           </div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">
-            Dive into the World of Anonymous Feedback
+            Dive into the World of Anonymous Conversations
           </h1>
           <p className="mt-4 text-lg text-zinc-400">
             Anonnymously — Where your identity remains a secret.
@@ -44,6 +44,7 @@ export default function Home() {
 
         <Carousel
           plugins={[Autoplay({ delay: 3000 })]}
+          opts={{ loop: true }}
           className="w-full max-w-lg md:max-w-xl"
         >
           <CarouselContent>
